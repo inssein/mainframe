@@ -1,0 +1,26 @@
+image:
+  tag: "2022.12"
+
+ingress:
+  main:
+    enabled: true
+    annotations:
+      "nginx.org/websocket-services": "home-assistant"
+    hosts:
+      - host: "ha.mnara.ca"
+        paths:
+          - path: "/"
+
+hostNetwork: true
+
+persistence:
+  config:
+    enabled: true
+
+dnsPolicy: "ClusterFirstWithHostNet"
+
+securityContext:
+  privileged: true
+  # capabilities:
+  #   add: ["NET_ADMIN", "NET_RAW", "SYS_ADMIN"]
+

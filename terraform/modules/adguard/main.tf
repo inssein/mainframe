@@ -1,0 +1,48 @@
+resource "helm_release" "adguard" {
+  name       = "adguard"
+  repository = "https://k8s-at-home.com/charts/"
+  chart      = "adguard-home"
+  values     = [templatefile("${path.module}/values.yaml", {})]
+}
+
+resource "kubernetes_service" "dns-tcp" {
+  metadata {
+    name = "adguard-dns-tcp"
+    annotations = {
+      "metallb.universe.tf/allow-shared-ip" = "adguard-dns"
+    }
+  }
+  spec {
+    selector = {
+      "app.kubernetes.io/name" = "adguard-home"
+    }
+    type             = "LoadBalancer"
+    load_balancer_ip = "192.168.50.53"
+    port {
+      port        = 53
+      target_port = 53
+      protocol    = "TCP"
+    }
+  }
+}
+
+resource "kubernetes_service" "dns-udp" {
+  metadata {
+    name = "adguard-dns-udp"
+    annotations = {
+      "metallb.universe.tf/allow-shared-ip" = "adguard-dns"
+    }
+  }
+  spec {
+    selector = {
+      "app.kubernetes.io/name" = "adguard-home"
+    }
+    type             = "LoadBalancer"
+    load_balancer_ip = "192.168.50.53"
+    port {
+      port        = 53
+      target_port = 53
+      protocol    = "UDP"
+    }
+  }
+}

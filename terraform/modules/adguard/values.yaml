@@ -1,0 +1,8 @@
+image:
+  tag: v0.107.21
+
+service:
+  dns-tcp:
+    enabled: false
+  dns-udp:
+    enabled: false

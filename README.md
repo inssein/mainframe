@@ -30,3 +30,32 @@ brew install hashicorp/tap/terraform
 ```
 
 The terraform automation is broken up into 3 stages (bootstrap, kubernetes, services), all explained in their respective README's.
+
+## AdGuard
+
+The service will be exposed on 192.168.50.53 (hardcoded, can let it auto assign), and once its up, adjust the router settings to use that as the DNS.
+
+## Home Assistant
+
+Home assistant doesn't work without modifications to its configuration file, it complains about a reverse proxy error.
+
+In order to fix this:
+1. Figure out which node longhorn is using for its storage volume by running `kubectl --namespace longhorn-system port-forward service/longhorn-frontend 5080:80`, then going to `localhost:5080`, then go to the volumes tab and click on the home assistant volume. Somewhere on that page it should mention which mainframe node its on.
+1. SSH into the node
+1. Run `lsblk`
+1. `cd` into the directory returned by `lsblk` (`cd /var/lib/kubelet/pods/9514a649-ebd0-4b6e-84ff-ad74a17f5a7f/...`)
+1. Add the following configuration to `configuration.yaml`:
+    ```
+    http:
+    server_host: 0.0.0.0
+    ip_ban_enabled: true
+    login_attempts_threshold: 5
+    use_x_forwarded_for: true
+    trusted_proxies:
+    - 10.42.0.0/16
+    - 192.168.0.0/16
+    ```
+1. Restart the home-assistant pod by scaling up and then down: `kubectl scale --replicas=0 deployment/home-assistant`
+
+## Todo
+1. Backup longhorn storage so we don't lose configuration for home-assistant and adguard

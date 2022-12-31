@@ -20,7 +20,7 @@ There is a little bit of manual work that needs to be done for each Pi.
 
 ## Automation
 
-We are going to use Terraform as much as possible for automation. It may not be perfectly suited for this task, but see goal #1.
+Terraform is used as much as possible for automation. It may not be perfectly suited for this task, but see goal #1.
 
 Ensure terraform is installed by running:
 
@@ -58,4 +58,6 @@ In order to fix this:
 1. Restart the home-assistant pod by scaling up and then down: `kubectl scale --replicas=0 deployment/home-assistant`
 
 ## Todo
-1. Backup longhorn storage so we don't lose configuration for home-assistant and adguard
+1. Backup longhorn storage so we don't lose configuration for home-assistant and adguard.
+1. Put statefile from bootstrap stage somewhere, currently on local machine.
+1. Automate grabbing the kubernetes config from coordinator node.

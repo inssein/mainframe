@@ -6,6 +6,10 @@ It also doesn't have its state file backed up anywhere, which means if I need to
 
 If in case that happens, the k3s token can be found at `mainframe-n01:/var/lib/rancher/k3s/server/node-token`.
 
+## Run the automation
+1. `terraform init`
+2. `terraform apply`
+
 ## Configuration
 After the bootstrap is run, you should have a running k3s cluster. To make changes locally, you need to grab `mainframe-n01:/etc/rancher/k3s/k3s.yaml` and save it as `~/.kube/config`.
 

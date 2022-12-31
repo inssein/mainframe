@@ -22,23 +22,11 @@ There is a little bit of manual work that needs to be done for each Pi.
 
 We are going to use Terraform as much as possible for automation. It may not be perfectly suited for this task, but see goal #1.
 
-The rest of the steps assumes you are in the `terraform` directory.
+Ensure terraform is installed by running:
 
-1. Install terraform
-    ```
-    brew tap hashicorp/tap
-    brew install hashicorp/tap/terraform
-    ```
-1. Run `terraform init`
-1. Run `terraform apply`
+```
+brew tap hashicorp/tap
+brew install hashicorp/tap/terraform
+```
 
-You should now have a fully working k3s cluster.
-
-## Kubernetes
-
-1. Install [kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/) on local machine.
-1. Grab the k3s configuration file from the coordinator node and place it in `~/.kube/config`. The configuration file can be found on mainframe-n01:/etc/rancher/k3s/k3s.yaml. Make sure to point to the ip address of the coordinator node (not hostname as k3s doesn't support mDNS), and optionally rename the contexts / admin user.
-
-## ToDo
-
-1. There is a dependency in terraform between creating the cluster and running kubernetes as the config is required. Separate them out.
+The terraform automation is broken up into 3 stages (bootstrap, kubernetes, services), all explained in their respective README's.

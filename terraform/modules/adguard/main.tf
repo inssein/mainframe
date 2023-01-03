@@ -46,3 +46,29 @@ resource "kubernetes_service" "dns-udp" {
     }
   }
 }
+
+resource "kubernetes_ingress_v1" "adguard-dashboard" {
+  metadata {
+    name = "adguard-dashboard"
+  }
+
+  spec {
+    # ingress_class_name = "traefik-internal"
+
+    rule {
+      host = "adguard.internal.mnara.ca"
+      http {
+        path {
+          backend {
+            service {
+              name = "adguard-adguard-home"
+              port {
+                number = 3000
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

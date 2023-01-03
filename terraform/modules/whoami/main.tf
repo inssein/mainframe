@@ -51,6 +51,8 @@ resource "kubernetes_ingress_v1" "whoami" {
   }
 
   spec {
+    ingress_class_name = "traefik"
+
     rule {
       host = "home.mnara.ca"
       http {

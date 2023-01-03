@@ -31,9 +31,21 @@ brew install hashicorp/tap/terraform
 
 The terraform automation is broken up into 3 stages (bootstrap, kubernetes, services), all explained in their respective README's.
 
-## AdGuard
+## Networking
 
-The service will be exposed on 192.168.50.53 (hardcoded, can let it auto assign), and once its up, adjust the router settings to use that as the DNS.
+By default, nothing is exposed to the outside world as the router firewall blocks everything.
+
+### Static IP
+
+The cluster currently uses two hostnames: home.mnara.ca and ha.mnara.ca. The cluster is setup to run a task every 5 minutes to update the IP address incase it changes.
+
+### HTTP(s)
+
+Run `kubectl get ingress` to get the IP of the ingress service and then port-forward 80 and 443 so that those services are available externally.
+
+### DNS
+
+AdGuard Home will be exposed on 192.168.50.53 (hardcoded, can let it auto assign), and once its up, adjust the router settings to use that as the DNS.
 
 ## Home Assistant
 
@@ -59,5 +71,5 @@ In order to fix this:
 
 ## Todo
 1. Backup longhorn storage so we don't lose configuration for home-assistant and adguard.
-1. Put statefile from bootstrap stage somewhere, currently on local machine.
 1. Automate grabbing the kubernetes config from coordinator node.
+1. Write a script that generates the DietPi configuration from some input parameters. Most of the information in the config is defaults, but DietPi doesn't work with a partial configuration.

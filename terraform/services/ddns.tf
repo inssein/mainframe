@@ -4,8 +4,8 @@ resource "kubernetes_manifest" "cloudflare-secret" {
     kind       = "SealedSecret"
 
     metadata = {
-      name              = "cloudflare"
-      namespace         = "default",
+      name      = "cloudflare"
+      namespace = "default",
     }
 
     spec = {

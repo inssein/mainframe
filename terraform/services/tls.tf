@@ -23,7 +23,8 @@ resource "kubernetes_manifest" "cert-manager-issuer" {
                 }
               }
             }
-        }]
+          }
+        ]
       }
     }
   }

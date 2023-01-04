@@ -33,6 +33,11 @@ module "ingress-nginx" {
   source = "../modules/ingress-nginx"
 }
 
+# traefik dashboard
+module "traefik-dashboard" {
+  source = "../modules/traefik-dashboard"
+}
+
 # setup storage - longhorn
 module "longhorn" {
   source = "../modules/longhorn"

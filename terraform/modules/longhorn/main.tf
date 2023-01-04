@@ -24,3 +24,30 @@ resource "helm_release" "longhorn" {
   version          = "1.3.2"
   create_namespace = true
 }
+
+resource "kubernetes_ingress_v1" "longhorn-dashboard" {
+  metadata {
+    name      = "longhorn-dashboard"
+    namespace = "longhorn-system"
+  }
+
+  spec {
+    ingress_class_name = "nginx"
+
+    rule {
+      host = "longhorn.internal.mnara.ca"
+      http {
+        path {
+          backend {
+            service {
+              name = "longhorn-frontend"
+              port {
+                number = 80
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

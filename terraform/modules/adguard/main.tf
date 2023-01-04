@@ -53,7 +53,7 @@ resource "kubernetes_ingress_v1" "adguard-dashboard" {
   }
 
   spec {
-    # ingress_class_name = "traefik-internal"
+    ingress_class_name = "nginx"
 
     rule {
       host = "adguard.internal.mnara.ca"

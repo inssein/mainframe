@@ -49,11 +49,16 @@ resource "kubernetes_service" "dns-udp" {
 
 resource "kubernetes_ingress_v1" "adguard-dashboard" {
   metadata {
-    name = "adguard-dashboard"
+    name      = "adguard-dashboard"
+    namespace = "default"
   }
 
   spec {
     ingress_class_name = "nginx"
+
+    tls {
+      secret_name = "wildcard-internal-mnara-ca-tls"
+    }
 
     rule {
       host = "adguard.internal.mnara.ca"

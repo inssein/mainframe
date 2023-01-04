@@ -10,6 +10,8 @@ ingress:
       - host: "ha.mnara.ca"
         paths:
           - path: "/"
+  tls:
+    secretName: "wildcard-mnara-ca-tls"
 
 hostNetwork: true
 

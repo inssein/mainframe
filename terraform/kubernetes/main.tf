@@ -48,3 +48,8 @@ module "longhorn" {
 module "sealed-secrets" {
   source = "../modules/sealed-secrets"
 }
+
+# tls certs
+module "cert-manager" {
+  source = "../modules/cert-manager"
+}

@@ -71,5 +71,6 @@ In order to fix this:
 
 ## Todo
 1. Backup longhorn storage so we don't lose configuration for home-assistant and adguard.
+1. Use wildcard cert in traefik and nginx by default. Currently doesn't seem to be a way to re-configure Traefik, so we would have to re-initialize k3s without traefik first.
 1. Automate grabbing the kubernetes config from coordinator node.
 1. Write a script that generates the DietPi configuration from some input parameters. Most of the information in the config is defaults, but DietPi doesn't work with a partial configuration.

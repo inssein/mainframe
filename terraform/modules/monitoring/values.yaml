@@ -1,0 +1,26 @@
+defaultRules:
+  rules:
+    etcd: false
+
+kubeEtcd:
+  enabled: false
+
+grafana:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - "grafana.internal.mnara.ca"
+    tls:
+      - hosts: 
+        - "grafana.internal.mnara.ca"
+
+alertmanager:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - "alertmanager.internal.mnara.ca"
+    tls:
+      - hosts:
+        - "alertmanager.internal.mnara.ca"

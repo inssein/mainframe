@@ -45,7 +45,7 @@ resource "kubernetes_ingress_v1" "traefik-ingress" {
     }
 
     tls {
-      secret_name = "wildcard-mnara-ca-tls"
+      hosts = ["traefik.internal.mnara.ca"]
     }
   }
 }

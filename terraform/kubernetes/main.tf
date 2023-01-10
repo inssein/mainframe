@@ -53,3 +53,8 @@ module "sealed-secrets" {
 module "cert-manager" {
   source = "../modules/cert-manager"
 }
+
+# monitoring
+module "monitoring" {
+  source = "../modules/monitoring"
+}

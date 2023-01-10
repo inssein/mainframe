@@ -49,5 +49,9 @@ resource "kubernetes_ingress_v1" "longhorn-dashboard" {
         }
       }
     }
+
+    tls {
+      hosts = ["longhorn.internal.mnara.ca"]
+    }
   }
 }

@@ -56,3 +56,13 @@ alertmanager:
     tls:
       - hosts:
         - "alertmanager.internal.mnara.ca"
+
+prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - "prometheus.internal.mnara.ca"
+    tls:
+      - hosts:
+        - "prometheus.internal.mnara.ca"

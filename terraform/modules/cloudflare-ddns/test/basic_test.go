@@ -11,6 +11,7 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os/exec"
 	"strings"
 	"testing"
 	"time"
@@ -24,8 +25,8 @@ func TestBasic(t *testing.T) {
 	accessed, matches := false, false
 
 	// grab external ip address
-	ipAddressRequest, _ := http.Get("https://ifconfig.co")
-	ipAddress, _ := io.ReadAll(ipAddressRequest.Body)
+	ipAddressCommand := exec.Command("dig", "+short", "myip.opendns.com", "@resolver1.opendns.com")
+	ipAddress, _ := ipAddressCommand.Output()
 	cleanedIpAddress := strings.TrimSuffix(string(ipAddress), "\n")
 
 	// setup webhook server
@@ -35,17 +36,20 @@ func TestBasic(t *testing.T) {
 		func(w http.ResponseWriter, r *http.Request) {
 			accessed = true
 			request, _ := io.ReadAll(r.Body)
+			body := fmt.Sprintf("{\"type\":\"A\",\"name\":\"%s\",\"content\":\"%s\",\"proxied\":true,\"ttl\":1}", "subdomain.example.com", cleanedIpAddress)
+			contentType := r.Header.Get("Content-Type")
+			authorization := r.Header.Get("Authorization")
 
+			// leaving log statements to help debug if it breaks
 			fmt.Printf("Request received: %s-\n", string(request))
-			fmt.Printf(" - IP to match: %s-\n", cleanedIpAddress)
-			fmt.Printf(" - Body to match: %s-\n", fmt.Sprintf("{\"type\":\"A\",\"name\":\"%s\",\"content\":\"%s\",\"proxied\":true,\"ttl\":1}", "subdomain.example.com", cleanedIpAddress))
-			fmt.Printf(" - Content-Type to match: %s-\n", r.Header.Get("Content-Type"))
-			fmt.Printf(" - Authorization to match: %s-\n", r.Header.Get("Authorization"))
+			fmt.Printf(" - Body to match: %s-\n", body)
+			fmt.Printf(" - Content-Type to match: %s-\n", contentType)
+			fmt.Printf(" - Authorization to match: %s-\n", authorization)
 
-			matches = r.Header.Get("Authorization") == "Bearer SECRET" &&
-				r.Header.Get("Content-Type") == "application/json" &&
-				string(request) == fmt.Sprintf("{\"type\":\"A\",\"name\":\"%s\",\"content\":\"%s\",\"proxied\":true,\"ttl\":1}", "subdomain.example.com", cleanedIpAddress)
+			matches = authorization == "Bearer SECRET" && contentType == "application/json" && body == string(request)
 		})
+
+	// start the server in a goroutine so that it doesn't block
 	go func() {
 		log.Fatal(http.ListenAndServe(":8080", mux))
 	}()

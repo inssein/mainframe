@@ -35,6 +35,13 @@ func TestBasic(t *testing.T) {
 		func(w http.ResponseWriter, r *http.Request) {
 			accessed = true
 			request, _ := io.ReadAll(r.Body)
+
+			fmt.Printf("Request received: %s-\n", string(request))
+			fmt.Printf(" - IP to match: %s-\n", cleanedIpAddress)
+			fmt.Printf(" - Body to match: %s-\n", fmt.Sprintf("{\"type\":\"A\",\"name\":\"%s\",\"content\":\"%s\",\"proxied\":true,\"ttl\":1}", "subdomain.example.com", cleanedIpAddress))
+			fmt.Printf(" - Content-Type to match: %s-\n", r.Header.Get("Content-Type"))
+			fmt.Printf(" - Authorization to match: %s-\n", r.Header.Get("Authorization"))
+
 			matches = r.Header.Get("Authorization") == "Bearer SECRET" &&
 				r.Header.Get("Content-Type") == "application/json" &&
 				string(request) == fmt.Sprintf("{\"type\":\"A\",\"name\":\"%s\",\"content\":\"%s\",\"proxied\":true,\"ttl\":1}", "subdomain.example.com", cleanedIpAddress)

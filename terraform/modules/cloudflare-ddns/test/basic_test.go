@@ -3,7 +3,6 @@ package test
 import (
 	"errors"
 	"fmt"
-	"github.com/gruntwork-io/terratest/modules/docker"
 	"github.com/gruntwork-io/terratest/modules/k8s"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/retry"
@@ -20,9 +19,6 @@ import (
 
 func TestBasic(t *testing.T) {
 	t.Parallel()
-
-	// first, build the docker image we are going to use
-	buildDockerImage(t)
 
 	maxRetries := 20
 	timeBetweenRetries := 10 * time.Second
@@ -96,13 +92,6 @@ func TestBasic(t *testing.T) {
 			return "Webhook called with the correct data", nil
 		},
 	)
-}
-
-func buildDockerImage(t *testing.T) {
-	options := &docker.BuildOptions{
-		Tags: []string{"mainframe/cloudflare-ddns"},
-	}
-	docker.Build(t, "../", options)
 }
 
 func getLocalIP() string {

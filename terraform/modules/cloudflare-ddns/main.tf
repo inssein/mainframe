@@ -14,7 +14,7 @@ resource "kubernetes_cron_job_v1" "cloudflare-ddns" {
             restart_policy = "OnFailure"
             container {
               name    = "cloudflare-ddns"
-              image   = "curlimages/curl"
+              image   = "mainframe/cloudflare-ddns"
               command = [
                 "sh",
                 "-c",

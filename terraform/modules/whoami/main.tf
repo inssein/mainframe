@@ -1,21 +1,22 @@
 resource "kubernetes_deployment_v1" "whoami" {
   metadata {
-    name = "whoami"
+    name      = var.name
+    namespace = var.namespace_name
   }
 
   spec {
-    replicas = 3
+    replicas = var.num_replicas
 
     selector {
       match_labels = {
-        app = "whoami"
+        app = var.name
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "whoami"
+          app = var.name
         }
       }
 
@@ -31,7 +32,8 @@ resource "kubernetes_deployment_v1" "whoami" {
 
 resource "kubernetes_service_v1" "whoami" {
   metadata {
-    name = kubernetes_deployment_v1.whoami.metadata.0.name
+    name      = kubernetes_deployment_v1.whoami.metadata.0.name
+    namespace = var.namespace_name
   }
   spec {
     selector = {
@@ -47,18 +49,19 @@ resource "kubernetes_service_v1" "whoami" {
 
 resource "kubernetes_ingress_v1" "whoami" {
   metadata {
-    name = kubernetes_deployment_v1.whoami.metadata.0.name
+    name      = kubernetes_deployment_v1.whoami.metadata.0.name
+    namespace = var.namespace_name
   }
 
   spec {
-    ingress_class_name = "traefik"
+    ingress_class_name = var.ingress_class_name
 
     tls {
-      secret_name = "wildcard-mnara-ca-tls"
+      secret_name = var.tls_secret_name
     }
 
     rule {
-      host = "home.mnara.ca"
+      host = var.host
       http {
         path {
           backend {

@@ -25,4 +25,9 @@ module "home-assistant" {
 
 module "whoami" {
   source = "../modules/whoami"
+  name = "whoami"
+  num_replicas = 3
+  ingress_class_name = "traefik"
+  tls_secret_name = "wildcard-mnara-ca-tls"
+  host = "home.mnara.ca"
 }

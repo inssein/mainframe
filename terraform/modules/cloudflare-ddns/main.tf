@@ -1,9 +1,10 @@
 resource "kubernetes_cron_job_v1" "cloudflare-ddns" {
   metadata {
-    name = "cloudflare-ddns-${var.name}"
+    name      = "cloudflare-ddns-${var.name}"
+    namespace = var.namespace_name
   }
   spec {
-    schedule = "*/5 * * * *"
+    schedule = var.schedule
     job_template {
       metadata {}
       spec {
@@ -12,8 +13,8 @@ resource "kubernetes_cron_job_v1" "cloudflare-ddns" {
           spec {
             restart_policy = "OnFailure"
             container {
-              name  = "cloudflare-ddns"
-              image = "curlimages/curl"
+              name    = "cloudflare-ddns"
+              image   = "curlimages/curl"
               command = [
                 "sh",
                 "-c",
@@ -40,6 +41,10 @@ resource "kubernetes_cron_job_v1" "cloudflare-ddns" {
               env {
                 name  = "NAME"
                 value = var.host
+              }
+              env {
+                name  = "CLOUDFLARE_URL"
+                value = var.cf_url
               }
             }
           }

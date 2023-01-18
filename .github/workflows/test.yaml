@@ -17,6 +17,10 @@ jobs:
       - name: Setup k3s
         uses: nolar/setup-k3d-k3s@v1
 
-      - name: Test Whoami
+      - name: Test Whoami Module
         run: go test -v -timeout 30m
         working-directory: ./terraform/modules/whoami/test
+
+      - name: Test Cloudflare DDNS Module
+        run: go test -v -timeout 30m
+        working-directory: ./terraform/modules/cloudflare-ddns/test

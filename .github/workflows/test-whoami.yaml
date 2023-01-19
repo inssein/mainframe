@@ -1,9 +1,13 @@
 name: Test
 
-on: [push]
+on:
+  push:
+    paths:
+      - "terraform/modules/whoami/**"
 
 jobs:
-  test:
+  whoami:
+    name: Whoami Module
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
@@ -20,7 +24,3 @@ jobs:
       - name: Test Whoami Module
         run: go test -v -timeout 30m
         working-directory: ./terraform/modules/whoami/test
-
-      - name: Test Cloudflare DDNS Module
-        run: go test -v -timeout 30m
-        working-directory: ./terraform/modules/cloudflare-ddns/test

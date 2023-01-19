@@ -4,7 +4,9 @@ resource "kubernetes_cron_job_v1" "cloudflare-ddns" {
     namespace = var.namespace_name
   }
   spec {
-    schedule = var.schedule
+    schedule           = var.schedule
+    concurrency_policy = "Forbid"
+
     job_template {
       metadata {}
       spec {
@@ -12,6 +14,7 @@ resource "kubernetes_cron_job_v1" "cloudflare-ddns" {
           metadata {}
           spec {
             restart_policy = "OnFailure"
+
             container {
               name    = "cloudflare-ddns"
               image   = "ghcr.io/inssein/mainframe/cloudflare-ddns:latest"

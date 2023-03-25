@@ -52,7 +52,7 @@ AdGuard Home will be exposed on 192.168.50.53 (hardcoded, can let it auto assign
 Home assistant doesn't work without modifications to its configuration file, it complains about a reverse proxy error.
 
 In order to fix this:
-1. Figure out which node longhorn is using for its storage volume by running `kubectl --namespace longhorn-system port-forward service/longhorn-frontend 5080:80`, then going to `localhost:5080`, then go to the volumes tab and click on the home assistant volume. Somewhere on that page it should mention which mainframe node its on.
+1. Figure out which node longhorn is using for its storage volume by going to https://longhorn.internal.mnara.ca, then go to the volumes tab and click on the home assistant volume. Somewhere on that page it should mention which mainframe node its on.
 1. SSH into the node
 1. Run `lsblk`
 1. `cd` into the directory returned by `lsblk` (`cd /var/lib/kubelet/pods/9514a649-ebd0-4b6e-84ff-ad74a17f5a7f/...`)

@@ -5,7 +5,7 @@ resource "kubernetes_manifest" "cloudflare-secret" {
 
     metadata = {
       name      = "cloudflare"
-      namespace = "default",
+      namespace = "default"
     }
 
     spec = {
@@ -24,22 +24,12 @@ resource "kubernetes_manifest" "cloudflare-secret" {
   }
 }
 
-module "cloudflare-ddns-ha" {
+module "cloudflare-ddns-external-wildcard" {
   source                   = "../modules/cloudflare-ddns"
-  name                     = "ha"
-  host                     = "ha.mnara.ca"
+  name                     = "external-wildcard"
+  host                     = "*.mnara.ca"
   cf_zone_id               = "9d13d3a6329627faab9c0a409f67a748"
   cf_record_id             = "3b51e921281be3e25c8a9838ec0efcfc"
-  cf_api_token_secret_name = kubernetes_manifest.cloudflare-secret.manifest.metadata.name
-  cf_api_token_secret_key  = "api_token"
-}
-
-module "cloudflare-ddns-home" {
-  source                   = "../modules/cloudflare-ddns"
-  name                     = "home"
-  host                     = "home.mnara.ca"
-  cf_zone_id               = "9d13d3a6329627faab9c0a409f67a748"
-  cf_record_id             = "4be56b39bb504694cce0c807b71b6994"
   cf_api_token_secret_name = kubernetes_manifest.cloudflare-secret.manifest.metadata.name
   cf_api_token_secret_key  = "api_token"
 }

@@ -1,0 +1,12 @@
+image:
+  tag: "1.21.0-debian"
+
+ingress:
+  enabled: true
+  hosts:
+    - host: "uptime.mnara.ca"
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls:
+    - secretName: "wildcard-mnara-ca-tls"

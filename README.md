@@ -65,13 +65,13 @@ In order to fix this:
 1. Add the following configuration to `configuration.yaml`:
     ```
     http:
-    server_host: 0.0.0.0
-    ip_ban_enabled: true
-    login_attempts_threshold: 5
-    use_x_forwarded_for: true
-    trusted_proxies:
-    - 10.42.0.0/16
-    - 192.168.0.0/16
+      server_host: 0.0.0.0
+      ip_ban_enabled: true
+      login_attempts_threshold: 5
+      use_x_forwarded_for: true
+      trusted_proxies:
+        - 10.42.0.0/16
+        - 192.168.0.0/16
     ```
 1. Restart the home-assistant pod by scaling up and then down: `kubectl scale --replicas=0 deployment/home-assistant`
 

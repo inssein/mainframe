@@ -1,5 +1,5 @@
 image:
-  tag: "2023.10"
+  tag: "2023.9.3"
 
 ingress:
   main:
@@ -23,6 +23,5 @@ dnsPolicy: "ClusterFirstWithHostNet"
 
 securityContext:
   privileged: true
-  # capabilities:
-  #   add: ["NET_ADMIN", "NET_RAW", "SYS_ADMIN"]
-
+  capabilities:
+    add: ["NET_ADMIN", "NET_RAW", "NET_BROADCAST"]

@@ -25,7 +25,7 @@ resource "null_resource" "gru" {
 
   provisioner "remote-exec" {
     inline = [
-      "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.25.7+k3s1 sh -s - --token=${random_password.k3s_cluster_secret.result} --write-kubeconfig-mode 644 --secrets-encryption --disable local-storage --disable servicelb",
+      "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.27.6+k3s1 sh -s - --token=${random_password.k3s_cluster_secret.result} --write-kubeconfig-mode 644 --secrets-encryption --disable local-storage --disable servicelb",
     ]
   }
 }
@@ -50,7 +50,7 @@ resource "null_resource" "minions" {
 
   provisioner "remote-exec" {
     inline = [
-      "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.24.9+k3s1 K3S_URL=https://${one(data.dns_a_record_set.gru.addrs)}:6443 K3S_TOKEN=${random_password.k3s_cluster_secret.result} sh -",
+      "curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.27.6+k3s1 K3S_URL=https://${one(data.dns_a_record_set.gru.addrs)}:6443 K3S_TOKEN=${random_password.k3s_cluster_secret.result} sh -",
     ]
   }
 }

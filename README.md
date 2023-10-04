@@ -31,6 +31,12 @@ brew install hashicorp/tap/terraform
 
 The terraform automation is broken up into 3 stages (bootstrap, kubernetes, services), all explained in their respective README's.
 
+### Updating K3S
+
+This process is not automated yet, but you can SSH into each of the nodes and perform upgrades manually.
+
+On the server, you can run `curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644 --secrets-encryption --disable local-storage --disable servicelb`, and on the agent, you can run `curl -sfL https://get.k3s.io | INSTALL_K3S_VERSION=v1.27.6+k3s1 K3S_URL=https://192.168.50.22:6443 K3S_TOKEN=PRIVATE sh -`
+
 ## Networking
 
 By default, nothing is exposed to the outside world as the router firewall blocks everything.

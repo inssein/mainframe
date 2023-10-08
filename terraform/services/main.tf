@@ -26,6 +26,10 @@ module "home-assistant" {
   source = "../modules/home-assistant"
 }
 
+module "home-bridge" {
+  source = "../modules/home-bridge"
+}
+
 module "whoami" {
   source             = "../modules/whoami"
   name               = "whoami"

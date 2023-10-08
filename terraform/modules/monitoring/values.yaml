@@ -1,43 +1,49 @@
+# for this chart to work with k3s, a few things need to be done, and they are graciously documented at:
+# https://fabianlee.org/2022/07/02/prometheus-installing-kube-prometheus-stack-on-k3s-cluster/
+
+# disable etcd by default since k3s has a sql-lite backed implementation
+# also disabled alert manager because we don't need it
 defaultRules:
   rules:
     etcd: false
+    alertmanager: false
 
 kubeEtcd:
   enabled: false
 
+kubeControllerManager:
+  enabled: true
+  endpoints: ['192.168.50.22']
+  service:
+    enabled: true
+    port: 10252
+    targetPort: 10252
+  serviceMonitor:
+    enabled: true
+    https: false
+
+# matched to service port 'prom-stack-kube-prometheus-kube-scheduler' -n kube-system
+kubeScheduler:
+  enabled: true
+  endpoints: ['192.168.50.22']
+  service:
+    enabled: true
+    port: 10251
+    targetPort: 10251
+  serviceMonitor:
+    enabled: true
+    https: false
+
+# matched to service port 'prom-stack-kube-prometheus-kube-proxy' -n kube-system
+kubeProxy:
+  enabled: true
+  endpoints: ['192.168.50.22']
+  service:
+    enabled: true
+    port: 10249
+    targetPort: 10249
+
 grafana:
-  dashboardProviders:
-    dashboardproviders.yaml:
-      apiVersion: 1
-      providers:
-      - name: 'grafana-dashboards-kubernetes'
-        orgId: 1
-        folder: 'Kubernetes'
-        type: file
-        disableDeletion: true
-        editable: true
-        options:
-          path: /var/lib/grafana/dashboards/grafana-dashboards-kubernetes
-  dashboards:
-    grafana-dashboards-kubernetes:
-      k8s-system-api-server:
-        url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-system-api-server.json
-        token: ''
-      k8s-system-coredns:
-        url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-system-coredns.json
-        token: ''
-      k8s-views-global:
-        url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-global.json
-        token: ''
-      k8s-views-namespaces:
-        url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-namespaces.json
-        token: ''
-      k8s-views-nodes:
-        url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-nodes.json
-        token: ''
-      k8s-views-pods:
-        url: https://raw.githubusercontent.com/dotdc/grafana-dashboards-kubernetes/master/dashboards/k8s-views-pods.json
-        token: ''
   ingress:
     enabled: true
     ingressClassName: "nginx"
@@ -46,16 +52,17 @@ grafana:
     tls:
       - hosts: 
         - "grafana.internal.mnara.ca"
+  grafanaSpec:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: longhorn
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
 
 alertmanager:
-  ingress:
-    enabled: true
-    ingressClassName: "nginx"
-    hosts:
-      - "alertmanager.internal.mnara.ca"
-    tls:
-      - hosts:
-        - "alertmanager.internal.mnara.ca"
+  enabled: false
 
 prometheus:
   ingress:
@@ -66,3 +73,11 @@ prometheus:
     tls:
       - hosts:
         - "prometheus.internal.mnara.ca"
+  prometheusSpec:
+    volumeClaimTemplate:
+      spec:
+        storageClassName: longhorn
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 2Gi

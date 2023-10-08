@@ -1,0 +1,19 @@
+image:
+  repository: homebridge/homebridge
+  tag: latest
+
+ingress:
+  main:
+    enabled: true
+    hosts:
+      - host: "hb.mnara.ca"
+        paths:
+          - path: "/"
+  tls:
+    secretName: "wildcard-mnara-ca-tls"
+
+hostNetwork: true
+
+persistence:
+  config:
+    enabled: true

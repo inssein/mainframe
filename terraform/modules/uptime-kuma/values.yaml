@@ -1,8 +1,9 @@
 image:
-  tag: "1.21.0-debian"
+  tag: "1.23.2-debian"
 
 ingress:
   enabled: true
+  className: traefik
   hosts:
     - host: "uptime.mnara.ca"
       paths:

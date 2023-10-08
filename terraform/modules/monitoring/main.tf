@@ -6,6 +6,7 @@ resource "helm_release" "prometheus-stack" {
   values           = [file("${path.module}/values.yaml")]
   namespace        = "monitoring"
   create_namespace = true
+  version          = "51.3.0"
 }
 
 # expose longhorn metrics

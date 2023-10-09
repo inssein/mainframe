@@ -1,19 +1,19 @@
 terraform {
   backend "kubernetes" {
-    secret_suffix = "state"
-    config_path   = "~/.kube/config"
+    secret_suffix  = "state"
+    config_path    = "~/.kube/config"
     config_context = "mainframe"
   }
 }
 
 provider "kubernetes" {
-  config_path = "~/.kube/config"
+  config_path    = "~/.kube/config"
   config_context = "mainframe"
 }
 
 provider "helm" {
   kubernetes {
-    config_path = "~/.kube/config"
+    config_path    = "~/.kube/config"
     config_context = "mainframe"
   }
 }
@@ -58,6 +58,6 @@ module "cert-manager" {
 }
 
 # monitoring
-module "monitoring" {
-  source = "../modules/monitoring"
-}
+# module "monitoring" {
+#   source = "../modules/monitoring"
+# }

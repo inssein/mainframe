@@ -42,3 +42,7 @@ module "whoami" {
 module "uptime-kuma" {
   source = "../modules/uptime-kuma"
 }
+
+module "matter-server" {
+  source = "../modules/matter-server"
+}

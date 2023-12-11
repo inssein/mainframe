@@ -18,6 +18,12 @@ hostNetwork: true
 persistence:
   config:
     enabled: true
+  bluetooth:
+    enabled: true
+    readOnly: true
+    hostPath: /run/dbus
+    mountPath: /run/dbus
+    type: hostPath
 
 dnsPolicy: "ClusterFirstWithHostNet"
 

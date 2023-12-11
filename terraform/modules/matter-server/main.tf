@@ -61,7 +61,7 @@ resource "kubernetes_deployment" "matter-server" {
 
       spec {
         container {
-          image = "ghcr.io/home-assistant-libs/python-matter-server:3.7.0"
+          image = "ghcr.io/home-assistant-libs/python-matter-server:5.0.3"
           name  = "matter-server"
           port {
             name           = "http"
@@ -71,6 +71,11 @@ resource "kubernetes_deployment" "matter-server" {
           volume_mount {
             mount_path = "/data"
             name       = "matter-server-data"
+          }
+          volume_mount {
+            mount_path = "/run/dbus"
+            name       = "bluetooth"
+            read_only  = true
           }
           security_context {
             capabilities {
@@ -84,6 +89,12 @@ resource "kubernetes_deployment" "matter-server" {
           name = "matter-server-data"
           persistent_volume_claim {
             claim_name = kubernetes_persistent_volume_claim.matter-server-claim.metadata.0.name
+          }
+        }
+        volume {
+          name = "bluetooth"
+          host_path {
+            path = "/run/dbus"
           }
         }
       }

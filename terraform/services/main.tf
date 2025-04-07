@@ -2,19 +2,19 @@ terraform {
   backend "kubernetes" {
     secret_suffix  = "services-state"
     config_path    = "~/.kube/config"
-    config_context = "mainframe"
+    config_context = "default"
   }
 }
 
 provider "kubernetes" {
   config_path    = "~/.kube/config"
-  config_context = "mainframe"
+  config_context = "default"
 }
 
 provider "helm" {
   kubernetes {
     config_path    = "~/.kube/config"
-    config_context = "mainframe"
+    config_context = "default"
   }
 }
 

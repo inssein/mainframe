@@ -1,9 +1,3 @@
-variable "ssh_user" {
-  type        = string
-  default     = "dietpi"
-  description = "username that terraform will use to ssh to the nodes"
-}
-
 variable "private_key" {
   type        = string
   default     = "mainframe"
@@ -12,7 +6,8 @@ variable "private_key" {
 
 variable "nodes" {
   type = list(object({
-    hostname = string
+    hostname = string,
+    ssh_user = string,
     roles    = list(string)
   }))
   description = "the list of nodes that will be bootstrapped"

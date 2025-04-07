@@ -1,5 +1,5 @@
 image:
-  tag: "1.23.2-debian"
+  tag: "1.23.13-debian"
 
 ingress:
   enabled: true

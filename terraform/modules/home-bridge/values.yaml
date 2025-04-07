@@ -1,6 +1,6 @@
 image:
   repository: homebridge/homebridge
-  tag: latest
+  tag: 2025-02-15
 
 ingress:
   main:

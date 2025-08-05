@@ -50,6 +50,21 @@ resource "kubernetes_cron_job_v1" "cloudflare-ddns" {
                 value = var.cf_url
               }
             }
+
+            affinity {
+              node_affinity {
+                preferred_during_scheduling_ignored_during_execution {
+                  weight = 100
+                  preference {
+                    match_expressions {
+                      key      = "node-role.kubernetes.io/master"
+                      operator = "NotIn"
+                      values   = [""]
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

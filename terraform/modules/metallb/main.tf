@@ -10,7 +10,18 @@ resource "kubernetes_namespace" "metallb-system" {
   }
 }
 
+resource "helm_release" "metallb" {
+  depends_on = [kubernetes_namespace.metallb-system]
+  name       = "metallb"
+  repository = "https://metallb.github.io/metallb"
+  chart      = "metallb"
+  namespace  = "metallb-system"
+  version    = "0.14.9"
+}
+
 resource "kubernetes_manifest" "ip_address_pool" {
+  depends_on = [helm_release.metallb]
+
   manifest = {
     apiVersion = "metallb.io/v1beta1"
     kind       = "IPAddressPool"
@@ -19,12 +30,14 @@ resource "kubernetes_manifest" "ip_address_pool" {
       namespace = "metallb-system"
     }
     spec = {
-      addresses = ["192.168.50.50-192.168.50.60"]
+      addresses = ["192.168.0.50-192.168.0.60"]
     }
   }
 }
 
 resource "kubernetes_manifest" "l2_advertisement" {
+  depends_on = [helm_release.metallb]
+
   manifest = {
     apiVersion = "metallb.io/v1beta1"
     kind       = "L2Advertisement"
@@ -33,12 +46,4 @@ resource "kubernetes_manifest" "l2_advertisement" {
       namespace = "metallb-system"
     }
   }
-}
-
-resource "helm_release" "metallb" {
-  name       = "metallb"
-  repository = "https://metallb.github.io/metallb"
-  chart      = "metallb"
-  namespace  = "metallb-system"
-  version    = "0.14.9" 
 }

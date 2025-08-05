@@ -38,7 +38,7 @@ AUTO_SETUP_NET_STATIC_GATEWAY=192.168.0.1
 AUTO_SETUP_NET_STATIC_DNS=9.9.9.9 149.112.112.112
 
 # Set to "1" to convert DHCP leased network settings into static settings automatically on first boot.
-AUTO_SETUP_DHCP_TO_STATIC=1
+AUTO_SETUP_DHCP_TO_STATIC=0
 
 # Hostname
 AUTO_SETUP_NET_HOSTNAME=mainframe-n01
@@ -82,7 +82,7 @@ AUTO_SETUP_SSH_SERVER_INDEX=-2
 # - Public key(s) for "root" and "dietpi" users, which will be added to ~/.ssh/authorized_keys
 # - Use the same setting multiple times for adding multiple keys.
 # - See SOFTWARE_DISABLE_SSH_PASSWORD_LOGINS below for disabling SSH password logins.
-AUTO_SETUP_SSH_PUBKEY=ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAxzykbIuveohhhsNRgb/nqpzu1Dye44H2eqUs7vvHdA terraform@mainframe.loca
+AUTO_SETUP_SSH_PUBKEY=ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAxzykbIuveohhhsNRgb/nqpzu1Dye44H2eqUs7vvHdA terraform@mainframe.local
 
 # Logging mode choice: 0=none/custom | -1=RAMlog hourly clear | -2=RAMlog hourly save to disk + clear | -3=Rsyslog + Logrotate
 AUTO_SETUP_LOGGING_INDEX=-1

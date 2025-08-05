@@ -1,8 +1,19 @@
 image:
-  tag: v0.107.56
+  tag: v0.107.59
 
 service:
   dns-tcp:
     enabled: false
   dns-udp:
     enabled: false
+
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - mainframe-gru

@@ -1,15 +1,17 @@
 # Mainframe
 
-This repository consists of software that runs on a Raspberry Pi Cluster.
+This repository consists of software to run my homelab. Initially it was 4 Raspberry Pis, but I have recently added a much more powerful machine to run a NAS. It's not that the Pis couldn't do it, but I had them running on MicroSD cards (bad idea; unreliable), so I decided to add a capable machine into the mix with SSDs and HDDs.
 
 ## Goals
 
 1. Learn Terraform
-2. Learn Kubernetes
-3. Run a few services in my home network (Home Assistant, AdGuard, maybe an app) that are currently running via other means.
+1. Learn Kubernetes
+1. Run a few services in my home network (Home Assistant, AdGuard, maybe an app) that are currently running via other means.
+1. Run a NAS.
 
 ## Setup
 
+### Raspberry Pi
 There is a little bit of manual work that needs to be done for each Pi.
 
 1. Generate a new ssh key for communicating with the pi nodes: `ssh-keygen -t ed25519 -f ~/.ssh/mainframe -C "terraform@mainframe.local"`
@@ -17,6 +19,24 @@ There is a little bit of manual work that needs to be done for each Pi.
 1. Download the [DietPI .img](https://dietpi.com/downloads/images/DietPi_RPi-ARMv8-Bullseye.7z)
 1. For each PI, grab the SD card, use Balena Etcher to flash the above image, and then replace `dietpi.txt` in the root of the SD Card with the one found in this repo. Lastly, adjust the hostname accordingly.
 
+### NAS
+I decided to run TrueNAS SCALE for the NAS portion of it, but not use it for any of its apps functionality and rely on my K3S setup.
+
+This machine has 2x2TB NVMe drives that I am running in mirrored fashion. Unfortunately, TrueNAS likes to use the whole drive for the OS, which is a big waste of a 2TB NVMe drive. I decided to partition 256gb for the boot data and use the rest as storage by following this [guide](https://www.reddit.com/r/truenas/comments/lgf75w/scalehowto_split_ssd_during_installation/).
+
+1. Download the ISO and use Balena Etcher to flash it to a USB drive.
+1. Run the installer, go into the shell, edit `vi /usr/lib/python3/dist-packages/truenas_installer/install.py`, and adjust "await run(["sgdisk", "-n3:0:0", "-t3:BF01", disk.device])" to "await run(["sgdisk", "-n3:0:+256gb", "-t3:BF01", disk.device])". The only change was the +256gb.
+1. Finish with the rest of the installer.
+1. Open up the web interface, go into the shell and run:
+  a. `sudo su`
+  b. `sgdisk -n4:0:0 -t4:BF01 /dev/nvme0n1`
+  c. `sgdisk -n4:0:0 -t4:BF01 /dev/nvme1n1`
+  d. `partprobe`
+  e. `fdisk -lx /dev/nvme0n1`
+  f. `fdisk -lx /dev/nvme1n1`
+  g. `zpool create -f ssd-storage mirror /dev/disk/by-partuuid/[uuid_from fdisk -lx disk1] /dev/disk/by-partuuid/[uuid_from fdisk -lx disk2]`
+  h. `zpool export ssd-storage`
+1. Go back into the Web UI, and import the storage pool.
 
 ## Automation
 

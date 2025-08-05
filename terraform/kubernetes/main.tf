@@ -31,6 +31,11 @@ module "metallb" {
   source = "../modules/metallb"
 }
 
+# setup secrets management
+module "sealed-secrets" {
+  source = "../modules/sealed-secrets"
+}
+
 # setup internal ingress controller (using nginx)
 module "ingress-nginx" {
   source = "../modules/ingress-nginx"
@@ -44,17 +49,7 @@ module "traefik-dashboard" {
 # setup storage - longhorn
 module "longhorn" {
   source = "../modules/longhorn"
-  nodes  = toset([for each in data.terraform_remote_state.bootstrap.outputs.nodes : each.hostname])
-}
-
-# setup secrets management
-module "sealed-secrets" {
-  source = "../modules/sealed-secrets"
-}
-
-# tls certs
-module "cert-manager" {
-  source = "../modules/cert-manager"
+  nodes  = toset([for each in data.terraform_remote_state.bootstrap.outputs.nodes : each.hostname if contains(each.roles, "minion")])
 }
 
 # monitoring

@@ -61,7 +61,7 @@ resource "kubernetes_deployment" "matter-server" {
 
       spec {
         container {
-          image = "ghcr.io/home-assistant-libs/python-matter-server:5.0.3"
+          image = "ghcr.io/home-assistant-libs/python-matter-server:7.0.1"
           name  = "matter-server"
           port {
             name           = "http"

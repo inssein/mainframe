@@ -1,6 +1,6 @@
 version: 14.0.1
 image:
-  tag: "2025.2.5"
+  tag: "2025.4.1"
 
 ingress:
   main:
@@ -32,3 +32,14 @@ securityContext:
   privileged: true
   capabilities:
     add: ["NET_ADMIN", "NET_RAW", "NET_BROADCAST"]
+
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 100
+        preference:
+          matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - mainframe-gru

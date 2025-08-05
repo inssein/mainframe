@@ -12,17 +12,26 @@ resource "kubernetes_service" "dns-tcp" {
       "metallb.universe.tf/allow-shared-ip" = "adguard-dns"
     }
   }
+
   spec {
     selector = {
       "app.kubernetes.io/name" = "adguard-home"
     }
+
     type             = "LoadBalancer"
-    load_balancer_ip = "192.168.50.53"
+    load_balancer_ip = "192.168.0.53"
+
     port {
       port        = 53
       target_port = 53
       protocol    = "TCP"
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      metadata[0].annotations["metallb.io/ip-allocated-from-pool"],
+    ]
   }
 }
 
@@ -33,17 +42,26 @@ resource "kubernetes_service" "dns-udp" {
       "metallb.universe.tf/allow-shared-ip" = "adguard-dns"
     }
   }
+
   spec {
     selector = {
       "app.kubernetes.io/name" = "adguard-home"
     }
+
     type             = "LoadBalancer"
-    load_balancer_ip = "192.168.50.53"
+    load_balancer_ip = "192.168.0.53"
+
     port {
       port        = 53
       target_port = 53
       protocol    = "UDP"
     }
+  }
+
+  lifecycle {
+    ignore_changes = [
+      metadata[0].annotations["metallb.io/ip-allocated-from-pool"],
+    ]
   }
 }
 

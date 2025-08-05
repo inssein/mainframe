@@ -1,3 +1,9 @@
+locals {
+  gru     = one(toset([for each in var.nodes : each if contains(each.roles, "gru")]))
+  minions = [for each in var.nodes : each if contains(each.roles, "minion")]
+}
+
+# each raspberry pi needs to have their cgroup settings configured
 resource "null_resource" "bootstrap" {
   # todo: version is cumbersome, maybe we can move the commands
   # into a file and use a checksum of the file
@@ -5,11 +11,11 @@ resource "null_resource" "bootstrap" {
     version = "0.0.6"
   }
 
-  for_each = { for n in var.nodes : n.hostname => n }
+  for_each = { for node in local.minions : node.hostname => node }
 
   connection {
     type        = "ssh"
-    user        = var.ssh_user
+    user        = each.value.ssh_user
     private_key = file("~/.ssh/${var.private_key}")
     host        = each.value.hostname
   }

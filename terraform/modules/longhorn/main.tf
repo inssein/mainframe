@@ -21,11 +21,13 @@ resource "helm_release" "longhorn" {
   repository       = "https://charts.longhorn.io"
   chart            = "longhorn"
   namespace        = "longhorn-system"
-  version          = "1.8.0"
+  version          = "1.8.1"
   create_namespace = true
 }
 
 resource "kubernetes_ingress_v1" "longhorn-dashboard" {
+  depends_on = [helm_release.longhorn]
+
   metadata {
     name      = "longhorn-dashboard"
     namespace = "longhorn-system"

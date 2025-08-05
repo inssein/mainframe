@@ -16,3 +16,4 @@ After the bootstrap is run, you should have a running k3s cluster. To make chang
 
 ## Todo
 1. Waiting for 90s for restart to be complete seems silly - try connecting to SSH? Terraform by default keeps trying.
+1. This process is actually broken. The token we get is not correct since you need the full token from `/var/lib/rancher/k3s/server/token`.

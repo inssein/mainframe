@@ -2,6 +2,11 @@ resource "kubernetes_service_v1" "traefik-dashboard" {
   metadata {
     name      = "traefik-dashboard"
     namespace = "kube-system"
+
+    labels = {
+      "app.kubernetes.io/instance" = "traefik"
+      "app.kubernetes.io/name"     = "traefik-dashboard"
+    }
   }
 
   spec {
@@ -9,8 +14,9 @@ resource "kubernetes_service_v1" "traefik-dashboard" {
 
     port {
       name        = "traefik"
-      port        = 9000
-      target_port = 9000
+      port        = 8080
+      target_port = "traefik"
+      protocol    = "TCP"
     }
 
     selector = {
@@ -36,7 +42,7 @@ resource "kubernetes_ingress_v1" "traefik-ingress" {
             service {
               name = "traefik-dashboard"
               port {
-                number = 9000
+                number = 8080
               }
             }
           }

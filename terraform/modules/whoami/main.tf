@@ -25,6 +25,20 @@ resource "kubernetes_deployment_v1" "whoami" {
           image = "containous/whoami:v1.5.0"
           name  = "whoami"
         }
+        affinity {
+          node_affinity {
+            preferred_during_scheduling_ignored_during_execution {
+              weight = 100
+              preference {
+                match_expressions {
+                  key      = "node-role.kubernetes.io/master"
+                  operator = "NotIn"
+                  values   = [""]
+                }
+              }
+            }
+          }
+        }
       }
     }
   }

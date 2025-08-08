@@ -12,7 +12,6 @@ providers:
   file:
     enabled: true
     content: >-
-      api:
         insecure: true
       http:
         services:
@@ -20,12 +19,33 @@ providers:
             loadBalancer:
               servers:
               - url: "http://192.168.0.228/"
+          photos:
+            loadBalancer:
+              servers:
+              - url: "http://192.168.0.228:30041/"
+          cloud:
+            loadBalancer:
+              servers:
+              - url: "http://192.168.0.228:30027/"
+
         routers:
           truenas-router:
             rule: "Host(`nas.mnara.ca`)"
             entryPoints:
               - "websecure"
             service: "truenas"
+            tls: {}
+          photos-router:
+            rule: "Host(`photos.mnara.ca`)"
+            entryPoints:
+              - "websecure"
+            service: "photos"
+            tls: {}
+          cloud-router:
+            rule: "Host(`cloud.mnara.ca`)"
+            entryPoints:
+              - "websecure"
+            service: "cloud"
             tls: {}
       EOT
     }
